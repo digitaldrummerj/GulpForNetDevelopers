@@ -75,9 +75,9 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include=".gitignore" />
     <Content Include="404.html" />
     <Content Include="App\app.js" />
-    <Content Include="App\app.route.js" />
     <Content Include="App\Home\home.controller.js" />
     <Content Include="App\Home\home.html" />
     <Content Include="App\Home\random-user.factory.js" />
@@ -107,6 +107,8 @@
     <Content Include=".eslintrc" />
     <Content Include=".bowerrc" />
     <Content Include="App\styles\main.scss" />
+    <Content Include="App\styles\sticky-footer.scss" />
+    <Content Include="App\styles\jumbotron-narrow.scss" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -2,16 +2,15 @@
 
 var gulpUtil = require('gulp-util');
 
-
-var projectName = 'MusicCityCode'; // must be kebab-case
-var moduleName = 'musicCityCode'; // must be camelCase
-var dotNetProjectName = 'Gulp for DotNet';
-
-var appRoot = './';
-var app = appRoot + 'app';
-var distRoot = 'dist';
-var buildsBaseDir = '../builds';
-var tmpBuildDir = buildsBaseDir + '/tmp';
+var projectName = 'MusicCityCode', // must be kebab-case
+    moduleName = 'musicCityCode', // must be camelCase
+    dotNetProjectName = 'Angular WebApi Demo',
+    appRoot = './',
+    app = appRoot + 'app',
+    distRoot = 'dist',
+    buildsBaseDir = '../builds',
+    tmpBuildDir = buildsBaseDir + '/tmp',
+    iisPort = 56712;
 
 var paths = {
     appRoot: appRoot,
@@ -25,7 +24,7 @@ var paths = {
     distImages: distRoot + '/images/',
     tmp: app + '/.tmp',
     tmpFonts: app + '/.tmp/fonts',
-    bowerComponents: app+ '/bower_components',
+    bowerComponents: app + '/bower_components',
     nodeModules: appRoot + 'node_modules',
     deployFileShare: '//127.0.0.1/shareDemo$/' + projectName,
     tmpBuildDir: tmpBuildDir,
@@ -36,6 +35,7 @@ var files = {
     appJs: paths.app + '/app.js',
     assemblyInfoFiles: paths.appRoot + '/**/AssemblyInfo.cs',
     bowerComponents: paths.bowerComponents + '/**/*',
+    bowerJson: paths.appRoot + 'bower.json',
     dist: paths.dist + '/**/*',
     distHtml: paths.dist + '/**/*.html',
     distCss: paths.distStyles + '/**/*.css',
@@ -144,5 +144,6 @@ module.exports = {
         removeStyleLinkTypeAttributes: true,
         minifyCSS: true,
         minifyJS: true
-    }
+    },
+    iisPort: iisPort 
 };

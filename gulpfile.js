@@ -1,10 +1,14 @@
 ﻿//'use strict';
 
-var gulp = require("gulp");
+var gulp = require("gulp"),
+    config = require('./gulp/config'),
+    plugins = {
+        gutil: require('gulp-util')
+    };
 
 // default task 
 gulp.task("default", function (done) {
-    console.log("Hello " + config.projectName);
+    plugins.gutil.log("Hello " + config.projectName);
     done();
 });
 
@@ -31,5 +35,11 @@ gulp.task('compile:release', compile.packageRelease)
 var inject = require('./gulp/inject');
 gulp.task('inject', inject.inject);
 
+// compile sass
 var sass = require('./gulp/styles');
-gulp.task('sass', sass.compileSass);
+gulp.task('compile:sass', sass.compileSass);
+
+//watch files and reload browser sync
+var watch = require('./gulp/watch');
+gulp.task('watch', watch.watch);
+gulp.task('browsersync', watch.browsersync);

@@ -8,7 +8,7 @@ var gulp = require('gulp'),
         assemblyInfo: require('gulp-dotnet-assembly-info'),
     },
     config = require('./config'),
-    files = [config.files.packageJson],
+    files = [config.files.packageJson, config.files.bowerJson],
     assemblyInfoFiles = config.files.assemblyInfoFiles,
     newVer = "0.0.0";
 

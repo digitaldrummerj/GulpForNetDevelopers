@@ -4,7 +4,8 @@ var gulp = require('gulp'),
     plugins = {
         msbuild: require("gulp-msbuild"),
         gutil: require('gulp-util'),
-        data: require('gulp-data')
+        data: require('gulp-data'),
+        del: require('del')
     },
     config = require('./config'),
     bump = require('./bump'),
@@ -59,13 +60,22 @@ function updateBuildDir() {
 		}));
 }
 
+function deleteBuildDir() {
+    return plugins.del([buildDir], { force: true });
+}
+
+
+
+var compile = gulp.series(updateBuildDir, deleteBuildDir, buildSolution, copyToBuildDir);
+
 var packageRelease = gulp.series(
         bump.bumpPatch,
         updateBuildDir,
+        deleteBuildDir,
         buildSolution,
         copyToBuildDir
     );
 module.exports = {
     packageRelease: packageRelease,
-    buildSolution: buildSolution
+    buildSolution: compile
 };

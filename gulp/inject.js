@@ -62,4 +62,6 @@ var inject = gulp.series(injectJavaScript, injectCss);
 
 module.exports = {
     inject: inject,
+    injectCss: injectCss,
+    injectJavaScript: injectJavaScript
 };
