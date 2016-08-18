@@ -82,13 +82,14 @@
     <Content Include="App\Home\home.html" />
     <Content Include="App\Home\random-user.factory.js" />
     <Content Include="Global.asax" />
-    <Content Include="gulpfile.js" />
-    <Content Include="gulp\bump.js" />
-    <Content Include="gulp\compile.js" />
-    <Content Include="gulp\config.js" />
-    <Content Include="gulp\inject.js" />
-    <Content Include="gulp\lint.js" />
-    <Content Include="gulp\styles.js" />
+    <None Include="gulpfile.js" />
+    <None Include="gulp\bump.js" />
+    <None Include="gulp\compile.js" />
+    <None Include="gulp\config.js" />
+    <None Include="gulp\inject.js" />
+    <None Include="gulp\lint.js" />
+    <None Include="gulp\styles.js" />
+    <Content Include="gulp\watch.js" />
     <Content Include="index.html" />
     <Content Include="Web.config" />
   </ItemGroup>

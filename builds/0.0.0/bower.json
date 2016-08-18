@@ -1,0 +1,16 @@
+{
+  "name": "gulp-for-dotnet",
+  "private": true,
+  "version": "2.4.1",
+  "dependencies": {
+    "angular": "~1.5.0",
+    "angular-resource": "~1.5.0",
+    "angular-cookies": "~1.5.0",
+    "angular-sanitize": "~1.5.0",
+    "angular-animate": "~1.5.0",
+    "angular-touch": "~1.5.0",
+    "angular-ui-router": "^0.3.1",
+    "angular-bootstrap": "^2.0.2",
+    "bootstrap-sass": "^3.3.7"
+  }
+}

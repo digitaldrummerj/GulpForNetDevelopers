@@ -48,17 +48,28 @@ function watch(done) {
 
     var styles = fileCollections.styles.slice(0);
     styles.push(files.mainScss);
+    plugins.gutil.log('Styles', styles);
+    var styleWatcher = gulp.watch(styles, { events: ['change', 'add'] },gulp.series(
+         inject.injectCss,
+         plugins.browsersync.reload
+         )
+    );
 
-    plugins.watch(
-		plugins.globby.sync(styles),
-		{
-		    events: ['change', 'add']
-		},
-		gulp.series(
-                inject.injectCss,
-                plugins.browsersync.reload            
-        )
-	);
+    styleWatcher.on('add', function (filepath) {
+        console.log('added', filepath);
+    });
+    
+
+    //plugins.watch(
+	//	plugins.globby.sync(styles),
+	//	{
+	//	    events: ['change', 'add']
+	//	},
+	//	gulp.series(
+    //            inject.injectCss,
+    //            plugins.browsersync.reload            
+    //    )
+	//);
 
     plugins.watch(
 		plugins.globby.sync(fileCollections.scripts),
