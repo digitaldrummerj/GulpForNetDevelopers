@@ -48,7 +48,7 @@ function updateAssemblyInfoFiles(done) {
 		    version: newVer,
 		    fileVersion: newVer
 		}))
-		.pipe(gulp.dest('../'));
+		.pipe(gulp.dest(config.paths.appRoot));
 
 }
 

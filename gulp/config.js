@@ -33,7 +33,7 @@ var paths = {
 
 var files = {
     appJs: paths.app + '/app.js',
-    assemblyInfoFiles: paths.appRoot + '/**/AssemblyInfo.cs',
+    assemblyInfoFiles: paths.appRoot + '**/AssemblyInfo.cs',
     bowerComponents: paths.bowerComponents + '/**/*',
     bowerJson: paths.appRoot + 'bower.json',
     dist: paths.dist + '/**/*',
