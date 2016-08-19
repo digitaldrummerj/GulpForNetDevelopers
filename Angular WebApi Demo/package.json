@@ -1,6 +1,6 @@
 {
   "name": "gulp-for-dotnet",
-  "version": "4.0.20",
+  "version": "4.0.42",
   "description": "demo for gulp for dotnet presentation",
   "author": "Justin James",
   "devDependencies": {
@@ -36,6 +36,7 @@
     "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.9",
-    "main-bower-files": "^2.13.1"
+    "main-bower-files": "^2.13.1",
+    "vinyl-paths": "^2.1.0"
   }
 }
