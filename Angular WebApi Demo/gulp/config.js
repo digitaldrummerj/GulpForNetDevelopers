@@ -28,7 +28,8 @@ var paths = {
     nodeModules: appRoot + 'node_modules',
     deployFileShare: '//127.0.0.1/shareDemo$/' + projectName,
     tmpBuildDir: tmpBuildDir,
-    projectTmpBuildOutput: tmpBuildDir + '/' + '_PublishedWebsites/' + dotNetProjectName + '/**/*'
+    projectTmpBuildOutput: tmpBuildDir + '/' + '_PublishedWebsites/' + dotNetProjectName + '/**/*',
+    gitUrl: 'https://github.com/digitaldrummerj/GulpForNetDevelopers.git'
 };
 
 var files = {
@@ -109,14 +110,16 @@ var fileCollections = {
         files.moduleScripts,
 		'!' + files.nodeModules,
 		'!' + files.tmp,
-        '!' + files.bowerComponents
+        '!' + files.bowerComponents,
+        paths.bowerComponents + '/bootstrap-toc/dist/bootstrap-toc.min.js'
     ],
     styles: [
 		files.styles,
         '!' + files.mainScss,
 		'!' + files.nodeModules,
 		'!' + files.tmp,
-        '!' + files.bowerComponents
+        '!' + files.bowerComponents,
+        paths.bowerComponents + '/bootstrap-toc/dist/bootstrap-toc.min.css'
     ]
 };
 

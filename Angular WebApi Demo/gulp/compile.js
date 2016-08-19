@@ -5,7 +5,8 @@ var gulp = require('gulp'),
         msbuild: require("gulp-msbuild"),
         gutil: require('gulp-util'),
         data: require('gulp-data'),
-        del: require('del')
+        del: require('del'),
+        git: require('gulp-git')
     },
     config = require('./config'),
     bump = require('./bump'),
@@ -13,7 +14,7 @@ var gulp = require('gulp'),
     paths = config.paths,
     solutionFiles = config.files.solutionFiles,
     fileShare = config.paths.deployFileShare,
-    
+
     buildBaseDir = config.paths.buildsBaseDir,
     tmpBuildDir = config.paths.tmpBuildDir,
     buildVersion = '0.0.0';
@@ -43,8 +44,8 @@ function buildSolution() {
 function copyToBuildDir() {
     plugins.gutil.log('projectTmpBuildOutput: ' + paths.projectTmpBuildOutput);
     plugins.gutil.log('buildDir: ' + buildDir);
-        return gulp.src([paths.projectTmpBuildOutput])
-            .pipe(gulp.dest(buildDir));
+    return gulp.src([paths.projectTmpBuildOutput])
+        .pipe(gulp.dest(buildDir));
 }
 
 function updateBuildDir() {
@@ -64,7 +65,45 @@ function deleteBuildDir() {
     return plugins.del([buildDir], { force: true });
 }
 
+function copyToFileShare() {
+    return gulp.src(buildDir + '/**/*')
+		.pipe(gulp.dest(fileShare + '/' + buildVersion + '/'));
+}
 
+function getGhPages() {
+    return git.clone(config.paths.gitUrl, { args: buildDir }, function (err) {
+        // handle err 
+        console.log('getGhPages Clone Error', err);
+    })
+    .pipe(
+        git.checkout('gh-pages', { args: '-b' }, function (err) {
+            //if (err) throw err;
+            console.log('getGhPages get gh-pages', err);
+        })
+    );
+}
+
+function deleteExistingFiles() {
+    return plugins.del(buildDir + '/**/*', { force: true });
+}
+
+function addCommitPushGhPages() {
+    return gulp.src(buildDir)
+        .pipe(git.add())
+        .pipe(git.commit('gulp build for v' + buildVersion))
+        .pipe(git.push('origin', 'gh-pages', function (err) {
+            if (err) throw err;
+        }));
+}
+
+function commitVersionFiles() {
+    return gulp.src(config.paths.appRoot)
+        .pipe(add())
+        .pipe(git.commit('gulp build for v' + buildVersion))
+        .pipe(gt.push('origin', 'master', function (err) {
+            if (err) throw err;
+        }));
+}
 
 var compile = gulp.series(updateBuildDir, deleteBuildDir, buildSolution, copyToBuildDir);
 
@@ -72,9 +111,19 @@ var packageRelease = gulp.series(
         bump.bumpPatch,
         updateBuildDir,
         deleteBuildDir,
-        buildSolution,
-        copyToBuildDir
+        gulp.parallel(
+            buildSolution,
+            getGHPages
+        ),
+        deleteExistingFiles,
+        copyToBuildDir,
+        gulp.parallel(
+            addCommitPushGhPages,
+            copyToFileShare
+        ),
+        commitVersionFiles
     );
+
 module.exports = {
     packageRelease: packageRelease,
     buildSolution: compile

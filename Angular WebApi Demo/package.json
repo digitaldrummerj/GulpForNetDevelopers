@@ -21,6 +21,7 @@
     "gulp-dotnet-assembly-info": "^0.1.11",
     "gulp-eslint": "^3.0.1",
     "gulp-flatten": "^0.3.0",
+    "gulp-git": "^1.11.0",
     "gulp-htmlmin": "^2.0.0",
     "gulp-imagemin": "^3.0.3",
     "gulp-inject": "^4.1.0",

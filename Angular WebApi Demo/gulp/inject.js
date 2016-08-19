@@ -28,6 +28,7 @@ function mainBowerFilesFilter(filePath) {
 }
 
 function injectJavaScript() {
+    console.log('scripts', config.fileCollections.scripts);
     return gulp.src(config.files.indexHtml)
 		.pipe(plugins.inject(gulp.src(plugins.mainBowerFiles({ filter: mainBowerFilesFilter }), {
 		    base: config.paths.app,

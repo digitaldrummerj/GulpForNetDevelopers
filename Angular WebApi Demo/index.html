@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -13,17 +13,7 @@
     <!-- endinject -->
 </head>
 <body ng-app="app">
-    <!--<div class="container">
-        <div class="header clearfix">
-            <h3 class="text-muted">Gulp for .NET Demo</h3>
-        </div>
-    </div>-->
     <div class="container">
-        <div class="jumbotron">
-    <h1>Gulp For The .NET Developer</h1>
-    <p class="lead">Demo site using Angular/WebApi/Bootstrap </p>
-    <p>Slides / Github</p>
-</div>
 
         <ui-view></ui-view>
     </div>
@@ -54,7 +44,15 @@
     <script src="app/app.js"></script>
     <script src="app/Home/random-user.factory.js"></script>
     <script src="app/Home/home.controller.js"></script>
+    <script src="app/bower_components/bootstrap-toc/dist/bootstrap-toc.min.js"></script>
     <!-- endinject -->
     <!-- You could add any other app dependencies manually here... -->
+    <script>
+        $(document).ready(function () {
+            $('pre code').each(function (i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+    </script>
 </body>
 </html>

@@ -1,24 +1,41 @@
-﻿<ol class="breadcrumb">
-    <li><a href="#/">Home</a></li>
-    <li>Compile Sass</li>
-</ol>
+﻿<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <p class="navbar-brand">Gulp for .NET Developer</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <ol class="breadcrumb">
+                    <li><a href="#/">Home</a></li>
+                    <li>Compile Sass</li>
+                </ol>
+            </div>
+        </div>
 
+    </div><!-- /.container-fluid -->
+</nav>
+<!-- main content area -->
+<div class="col-md-12">
     <h1 class="page-header">Compile Sass</h1>
 
-<h2>Overview</h2>
+    <div class="row">
+        <div class="col-md-12">
 
+            <h2>Overview</h2>
+        </div>
+    </div>
 
-<h2>Code Example</h2>
-
-<h3>Configuration</h3>
-<p class="label label-default">File: gulp/config.js</p>
-<span class="label label-warning">only applicable config from file</span>
-
-<pre>
-<code class="javascript">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Configuration</h2>
+            <p class="label label-default">File: gulp/config.js</p>
+            <span class="label label-warning">only applicable config from file</span>
+            <pre>
+            <code class="javascript">
 'use strict';
 var gulpUtil = require('gulp-util');
-
 var projectName = 'MusicCityCode', // must be kebab-case
     moduleName = 'musicCityCode', // must be camelCase
     dotNetProjectName = 'Angular WebApi Demo',
@@ -27,7 +44,6 @@ var projectName = 'MusicCityCode', // must be kebab-case
     distRoot = 'dist',
     buildsBaseDir = '../builds',
     tmpBuildDir = buildsBaseDir + '/tmp',
-
 var paths = {
     appRoot: appRoot,
     app: app,
@@ -38,7 +54,6 @@ var paths = {
     bowerComponents: app + '/bower_components',
     tmpBuildDir: tmpBuildDir
 };
-
 var files = {
     appJs: paths.app + '/app.js',
     assemblyInfoFiles: paths.appRoot + '**/AssemblyInfo.cs',
@@ -48,7 +63,6 @@ var files = {
     tmp: paths.tmp + '/**/*',
     tmpCss: paths.tmp + '/**/*.css'
 };
-
 var fileCollections = {
     styles: [
 		files.styles,
@@ -58,7 +72,6 @@ var fileCollections = {
         '!' + files.bowerComponents
     ]
 };
-
 module.exports = {
     projectName: projectName,
     moduleName: moduleName,
@@ -67,14 +80,16 @@ module.exports = {
     fileCollections: fileCollections
 };
  
-</code>
-</pre>
-
-<h3>Variables</h3>
-<p class="label label-default">File: gulp/styles.js</p>
-
-<pre>
-<code class="javascript">
+        </code>
+        </pre>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Variables</h2>
+            <p class="label label-default">File: gulp/styles.js</p>
+            <pre>
+            <code class="javascript">
 var gulp = require('gulp'),
     config = require('./config'),
     styles = require('./styles'),
@@ -86,13 +101,16 @@ var gulp = require('gulp'),
     sass: require('gulp-sass'),
     sourcemaps: require('gulp-sourcemaps')
 };
-
 </code>
 </pre>
-<h3>Task</h3>
-<p class="label label-default">File: gulp/styles.js</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Task</h2>
+            <p class="label label-default">File: gulp/styles.js</p>
 <pre>
-    <code class="javascript">
+<code class="javascript">
 function compileSass() {
     return gulp.src(config.files.mainScss)
 		.pipe(plugins.inject(
@@ -115,36 +133,41 @@ function compileSass() {
 	.pipe(plugins.sourcemaps.write())
 	.pipe(gulp.dest(config.paths.tmp));
 };
-
 module.exports = {
     compileSass: compileSass
 }
-
     </code>
-
 </pre>
 
-<h3>Adding Task to gulpfile.js</h3>
-<p class="label label-default">File: gulpfile.js</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Adding Task to gulpfile.js</h2>
+            <p class="label label-default">File: gulpfile.js</p>
 
 <pre>
 <code class="javascript">
 'use strict';
 var gulp = require("gulp");
-
 // import styles.js file
 var sass = require('./gulp/styles');
-
 // run the compileSass function that was exported in gulp/styles.js
 gulp.task('compile:sass', sass.compileSass);
-
 </code>
 </pre>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
 
-<h3>Running Task</h3>
+            <h2>Running Task</h2>
 
 <pre>
 <code class="dos">
     gulp compile:sass
 </code>
 </pre>
+        </div>
+    </div>
+</div>
