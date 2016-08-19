@@ -14,7 +14,10 @@ var gulp = require('gulp'),
 	},
 	paths = config.paths,
 	files = config.files,
-	fileCollections = config.fileCollections;
+	fileCollections = config.fileCollections,
+    watchOptions = {
+        ignorePermissionErrors: true
+    };
 
 function browsersync(done) {
     if (plugins.browsersync.active) {
@@ -44,72 +47,127 @@ function browsersync(done) {
     done();
 
 }
-function watch(done) {
 
+
+function watchStyles(done) {
+    const name = "styleWatcher";
+    // Add in mainScss file into collection of styles to monitor
+    // Not added in by default to avoid infinite loop for inject.
+    //.slice(0) makes a copy of the fileCollections.styles
     var styles = fileCollections.styles.slice(0);
     styles.push(files.mainScss);
-    plugins.gutil.log('Styles', styles);
-    var styleWatcher = gulp.watch(styles, { events: ['change', 'add'] },gulp.series(
-         inject.injectCss,
-         plugins.browsersync.reload
-         )
-    );
+    var styleWatcher = gulp.watch(styles, watchOptions);
 
-    styleWatcher.on('add', function (filepath) {
-        console.log('added', filepath);
-    });
-    
+    //has to be defined this way.  If gulp.series added to on it won't fire since gulp.series returns a function.
+    const scriptWatcherTasks = gulp.series
+        (
+            inject.injectCss,
+            plugins.browsersync.reload
+        );
 
-    //plugins.watch(
-	//	plugins.globby.sync(styles),
-	//	{
-	//	    events: ['change', 'add']
-	//	},
-	//	gulp.series(
-    //            inject.injectCss,
-    //            plugins.browsersync.reload            
-    //    )
-	//);
-
-    plugins.watch(
-		plugins.globby.sync(fileCollections.scripts),
-		{
-		    events: ['change', 'add', 'addDir', 'unlink', 'unlinkDir']
-		},
-		gulp.series(
-                inject.injectJavaScript,
-                plugins.browsersync.reload
-        )		
-	);
-
-    plugins.watch(
-		plugins.globby.sync(fileCollections.html),
-		{
-		    events: ['add', 'addDir', 'unlink', 'unlinkDir', 'change']
-		},
-		gulp.series(function (done) {
-		    plugins.gutil.log('browsersync html');
-		    plugins.browsersync.reload();
-		    done();
-		})
-	);
-
-    plugins.watch(
-        plugins.globby.sync(files.bowerComponents),
-		{
-		    events: ['change', 'add', 'addDir', 'unlink', 'unlinkDir']
-		},
-		gulp.series(
-                inject.inject,
-                plugins.browsersync.reload
-        )
-	);
+    // monitor all change events.
+    styleWatcher
+        .on('add', function (file) {
+            plugins.gutil.log(name + ' Add ' + file + ', running tasks...');
+            scriptWatcherTasks();
+        })
+        .on('change', function (file) {
+            plugins.gutil.log(name + ' Change ' + file + ', running tasks...');
+            scriptWatcherTasks();
+        })
+        .on('unlink', function (file) {
+            plugins.gutil.log(name + ' Delete ' + file + ', running tasks...');
+            scriptWatcherTasks();
+        })
+     .on('error', function (error) { plugins.gutil.log(name + ' ' + error); });
 
     done();
 }
 
-var sync = gulp.series(browsersync, watch);
+function watchScripts(done) {
+    const name = "scriptsWatcher";
+    var scriptsWatcher = gulp.watch(fileCollections.scripts, watchOptions);
+    const scriptWatchTasks = gulp.series(
+        inject.injectJavaScript,
+        plugins.browsersync.reload
+    );
+
+    scriptsWatcher
+        .on('add', function (file) {
+            plugins.gutil.log(name + ' Add ' + file + ', running tasks...');
+            scriptWatchTasks();
+        })
+        .on('change', function (file) {
+            plugins.gutil.log(name + ' Change ' + file + ', running tasks...');
+            scriptWatchTasks();
+        })
+        .on('unlink', function (file) {
+            plugins.gutil.log(name + ' Delete ' + file + ', running tasks...');
+            scriptWatchTasks();
+        })
+     .on('error', function (error) { plugins.gutil.log(name + ' ' + error); });
+
+    done();
+}
+
+function watchHtml(done) {
+    var htmlWatcher = gulp.watch(fileCollections.html, watchOptions);
+    const name = "htmlWatcher";
+    htmlWatcher
+        .on('add', function (file) {
+            plugins.gutil.log(name + ' Add ' + file + ', running tasks...');
+            plugins.browsersync.reload();
+        })
+        .on('change', function (file) {
+            plugins.gutil.log(name + ' Change ' + file + ', running tasks...');
+            plugins.browsersync.reload();
+        })
+        .on('unlink', function (file) {
+            plugins.gutil.log(name + ' Delete ' + file + ', running tasks...');
+            plugins.browsersync.reload();
+        })
+     .on('error', function (error) { plugins.gutil.log(name + ' ' + error); });
+
+    done();
+}
+
+function watchBowerComponents(done) {
+    const name = "bowerComponentWatcher";
+    var bowerComponentWatcher = gulp.watch(files.bowerComponents, watchOptions);
+    const bowerComponentWatcherTasks = gulp.series
+        (
+            inject.inject,
+            plugins.browsersync.reload
+        );
+
+    bowerComponentWatcher
+        .on('add', function (file) {
+            plugins.gutil.log(name + ' Add ' + file + ', running tasks...');
+            bowerComponentWatcherTasks();
+        })
+        .on('change', function (file) {
+            plugins.gutil.log(name + ' Change ' + file + ', running tasks...');
+            bowerComponentWatcherTasks();
+        })
+        .on('unlink', function (file) {
+            plugins.gutil.log(name + ' Delete' + file + ', running tasks...');
+            bowerComponentWatcherTasks();
+        })
+     .on('error', function (error) { plugins.gutil.log(name + '  ' + error); });
+
+    done();
+}
+
+var sync = gulp.series(
+    browsersync,
+    gulp.parallel(
+        watchBowerComponents,
+        watchHtml,
+        watchScripts,
+        watchStyles
+    )
+);
+
 module.exports = {
-    watch: watch,
     browsersync: sync
 };

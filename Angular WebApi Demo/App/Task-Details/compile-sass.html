@@ -1,0 +1,150 @@
+﻿<ol class="breadcrumb">
+    <li><a href="#/">Home</a></li>
+    <li>Compile Sass</li>
+</ol>
+
+    <h1 class="page-header">Compile Sass</h1>
+
+<h2>Overview</h2>
+
+
+<h2>Code Example</h2>
+
+<h3>Configuration</h3>
+<p class="label label-default">File: gulp/config.js</p>
+<span class="label label-warning">only applicable config from file</span>
+
+<pre>
+<code class="javascript">
+'use strict';
+var gulpUtil = require('gulp-util');
+
+var projectName = 'MusicCityCode', // must be kebab-case
+    moduleName = 'musicCityCode', // must be camelCase
+    dotNetProjectName = 'Angular WebApi Demo',
+    appRoot = './',
+    app = appRoot + 'app',
+    distRoot = 'dist',
+    buildsBaseDir = '../builds',
+    tmpBuildDir = buildsBaseDir + '/tmp',
+
+var paths = {
+    appRoot: appRoot,
+    app: app,
+    buildsBaseDir: buildsBaseDir,
+    styles: app + '/styles',
+    tmp: app + '/.tmp',
+    tmpFonts: app + '/.tmp/fonts',
+    bowerComponents: app + '/bower_components',
+    tmpBuildDir: tmpBuildDir
+};
+
+var files = {
+    appJs: paths.app + '/app.js',
+    assemblyInfoFiles: paths.appRoot + '**/AssemblyInfo.cs',
+    bowerComponents: paths.bowerComponents + '/**/*',
+    mainScss: paths.styles + '/main.scss',
+    styles: paths.app + '/**/*.scss',
+    tmp: paths.tmp + '/**/*',
+    tmpCss: paths.tmp + '/**/*.css'
+};
+
+var fileCollections = {
+    styles: [
+		files.styles,
+        '!' + files.mainScss,
+		'!' + files.nodeModules,
+		'!' + files.tmp,
+        '!' + files.bowerComponents
+    ]
+};
+
+module.exports = {
+    projectName: projectName,
+    moduleName: moduleName,
+    paths: paths,
+    files: files,
+    fileCollections: fileCollections
+};
+ 
+</code>
+</pre>
+
+<h3>Variables</h3>
+<p class="label label-default">File: gulp/styles.js</p>
+
+<pre>
+<code class="javascript">
+var gulp = require('gulp'),
+    config = require('./config'),
+    styles = require('./styles'),
+    plugins = {
+    autoprefixer: require('gulp-autoprefixer'),
+    flatten: require('gulp-flatten'),
+    inject: require('gulp-inject'),
+    mainBowerFiles: require('main-bower-files'),
+    sass: require('gulp-sass'),
+    sourcemaps: require('gulp-sourcemaps')
+};
+
+</code>
+</pre>
+<h3>Task</h3>
+<p class="label label-default">File: gulp/styles.js</p>
+<pre>
+    <code class="javascript">
+function compileSass() {
+    return gulp.src(config.files.mainScss)
+		.pipe(plugins.inject(
+			gulp.src(config.fileCollections.styles),
+			{
+			    relative: true,
+			    starttag: '/*** scss-inject ***/',
+			    endtag: '/*** end scss-inject ***/',
+			    transform: function (filepath) {
+			        return '@import "' + filepath + '";';
+			    }
+			}
+	))
+	.pipe(plugins.sourcemaps.init())
+	.pipe(plugins.sass({
+		includePaths: [config.paths.bowerComponents],
+		outputStyle: 'compressed'
+	}))
+	.pipe(plugins.autoprefixer())
+	.pipe(plugins.sourcemaps.write())
+	.pipe(gulp.dest(config.paths.tmp));
+};
+
+module.exports = {
+    compileSass: compileSass
+}
+
+    </code>
+
+</pre>
+
+<h3>Adding Task to gulpfile.js</h3>
+<p class="label label-default">File: gulpfile.js</p>
+
+<pre>
+<code class="javascript">
+'use strict';
+var gulp = require("gulp");
+
+// import styles.js file
+var sass = require('./gulp/styles');
+
+// run the compileSass function that was exported in gulp/styles.js
+gulp.task('compile:sass', sass.compileSass);
+
+</code>
+</pre>
+
+<h3>Running Task</h3>
+
+<pre>
+<code class="dos">
+    gulp compile:sass
+</code>
+</pre>

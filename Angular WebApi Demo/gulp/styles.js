@@ -27,7 +27,7 @@ function compileSass() {
 		))
 		.pipe(plugins.sourcemaps.init())
 		.pipe(plugins.sass({
-		    includePaths: [config.paths.bowerComponents],
+		    includePaths: [config.paths.bowerComponents, '!' + config.paths.bowerComponents + '/highlightjs'],
 		    outputStyle: 'compressed'
 		}))
 		.pipe(plugins.autoprefixer())

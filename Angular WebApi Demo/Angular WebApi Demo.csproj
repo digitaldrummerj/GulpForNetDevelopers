@@ -81,6 +81,13 @@
     <Content Include="App\Home\home.controller.js" />
     <Content Include="App\Home\home.html" />
     <Content Include="App\Home\random-user.factory.js" />
+    <Content Include="App\Task-Details\compile-project.html" />
+    <Content Include="App\Task-Details\compile-sass.html" />
+    <Content Include="App\Task-Details\increment-version.html" />
+    <Content Include="App\Task-Details\inject-files.html" />
+    <Content Include="App\Task-Details\lint-javascript.html" />
+    <Content Include="App\Task-Details\package-release.html" />
+    <Content Include="App\Task-Details\watch-files.html" />
     <Content Include="Global.asax" />
     <None Include="gulpfile.js" />
     <None Include="gulp\bump.js" />

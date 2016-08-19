@@ -1,4 +1,4 @@
-﻿//'use strict';
+﻿'use strict';
 
 var gulp = require("gulp"),
     config = require('./gulp/config'),
@@ -41,5 +41,4 @@ gulp.task('compile:sass', sass.compileSass);
 
 //watch files and reload browser sync
 var watch = require('./gulp/watch');
-gulp.task('watch', watch.watch);
 gulp.task('browsersync', watch.browsersync);
