@@ -95,7 +95,7 @@ function checkoutGhPages(done) {
     });
 }
 
-function deleteExistingFiles() {
+function deleteExistingFiles(done) {
     return plugins.del([buildDir + '/**/*', '!' + buildDir + '/.git/*'], { force: true });
 }
 
@@ -115,14 +115,11 @@ function addCommitPushGhPages(done) {
 }
 
 function commitVersionFiles(done) {
-    return gulp.src(config.paths.appRoot + '/**/*')
-        .pipe(plugins.git.add({ cwd: config.paths.appRoot }))
-        .pipe(plugins.git.commit('gulp build for v' + buildVersion, { emitData: true, cwd: config.paths.appRoot }))
+    return gulp.src([files.bowerJson, files.packageJson, files.assemblyInfoFiles])
+    .pipe(plugins.git.add())
+        .pipe(plugins.git.commit('gulp build for v' + buildVersion, { emitData: true}))
         .on('end', function() {
-            plugins.git.push('origin', 'master', { cwd: config.paths.appRoot }, function (err) {
-                if (err) throw err;
-                done();
-            });
+            plugins.git.push('origin', 'master', done);
         });
 }
 
@@ -168,6 +165,7 @@ var packageRelease = gulp.series(
         inject.inject,
         bump.bumpPatch,
         updateBuildDir,
+        commitVersionFiles,
         deleteBuildDir,
         gulp.parallel(
             buildSolution,
@@ -175,13 +173,12 @@ var packageRelease = gulp.series(
         ),
         checkoutGhPages,
         deleteExistingFiles,
-        copyToBuildDir,
         moveAndFlattenFonts,
         moveScriptsToDist,
 		moveCssToDist,
         inject.injectRelease,
-        addCommitPushGhPages,
-        commitVersionFiles
+        copyToBuildDir,
+        addCommitPushGhPages
     );
 
 module.exports = {

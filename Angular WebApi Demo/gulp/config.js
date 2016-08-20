@@ -6,7 +6,7 @@ var projectName = 'MusicCityCode', // must be kebab-case
     moduleName = 'musicCityCode', // must be camelCase
     dotNetProjectName = 'Angular WebApi Demo',
     appRoot = './',
-    app = appRoot + 'app',
+    app = appRoot + 'App',
     
     buildsBaseDir = '../../builds',
     distRoot = buildsBaseDir,
@@ -21,10 +21,10 @@ var paths = {
     buildsBaseDir: buildsBaseDir,
     deployFileShare: '//127.0.0.1/shareDemo$/' + projectName,
     dist: projectTmpBuildOutput,
-    distFonts: projectTmpBuildOutput + '/app/styles/fonts',
-    distImages: projectTmpBuildOutput + '/app/images/',
-    distScripts: projectTmpBuildOutput + '/app/scripts',
-    distStyles: projectTmpBuildOutput + '/app/styles',
+    distFonts: projectTmpBuildOutput + '/App/styles/fonts',
+    distImages: projectTmpBuildOutput + '/App/images/',
+    distScripts: projectTmpBuildOutput + '/App/scripts',
+    distStyles: projectTmpBuildOutput + '/App/styles',
     gitUrl: 'https://github.com/digitaldrummerj/GulpForNetDevelopers.git',
     images: app + '/images',
     nodeModules: appRoot + 'node_modules',
