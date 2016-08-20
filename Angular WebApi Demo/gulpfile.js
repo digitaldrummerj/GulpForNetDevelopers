@@ -33,7 +33,9 @@ gulp.task('compile:release', compile.packageRelease)
 
 //inject
 var inject = require('./gulp/inject');
-gulp.task('inject', inject.inject);
+gulp.task('inject:all', inject.inject);
+gulp.task('inject:css', inject.injectCss);
+gulp.task('inject:js', inject.injectJavaScript);
 
 // compile sass
 var sass = require('./gulp/styles');
