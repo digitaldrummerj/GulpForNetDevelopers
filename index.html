@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Gulp Demo</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- The css files generated from SCSS and from bower components are inserted in the below inject block don't put anything in there manually or it will be destroyed. You can put your css links anywhere else- just not in here.-->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="app/.tmp/default.css">
+    <link rel="stylesheet" href="app/.tmp/main.css">
+    <!-- endinject -->
+</head>
+<body ng-app="app">
+    <div class="container">
+
+        <ui-view></ui-view>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted">&copy; 2016 digitaldrummerj</p>
+        </div>
+    </footer>
+
+
+    <!-- Anything in the bower/inject block is automatically added. Put something in this block and it will probably be overwritten.
+    Add your user scripts anywhere else... just not in here. -->
+    <!-- bower:js -->
+    <script src="app/bower_components/angular/angular.js"></script>
+    <script src="app/bower_components/angular-resource/angular-resource.js"></script>
+    <script src="app/bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="app/bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="app/bower_components/angular-animate/angular-animate.js"></script>
+    <script src="app/bower_components/angular-touch/angular-touch.js"></script>
+    <script src="app/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="app/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="app/bower_components/jquery/dist/jquery.js"></script>
+    <script src="app/bower_components/highlightjs/highlight.pack.js"></script>
+    <script src="app/bower_components/bootstrap-sass/assets/javascripts/bootstrap.js"></script>
+    <!-- endinject -->
+    <!-- You could add any bower dependencies manually here... -->
+    <!-- inject:js -->
+    <script src="app/app.js"></script>
+    <script src="app/Home/random-user.factory.js"></script>
+    <script src="app/Home/home.controller.js"></script>
+    <script src="app/bower_components/bootstrap-toc/dist/bootstrap-toc.min.js"></script>
+    <!-- endinject -->
+    <!-- You could add any other app dependencies manually here... -->
+    <script>
+        $(document).ready(function () {
+            $('pre code').each(function (i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+    </script>
+</body>
+</html>

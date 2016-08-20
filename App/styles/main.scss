@@ -1,0 +1,39 @@
+
+//Put any vendor stuff you would like to add (for scss inclusion) below this line. Order matters.
+@import "bootstrap-sass/assets/stylesheets/bootstrap";
+
+//All of your *.scss files will automatically be compiled and injected into the block below. Don't add anything manually
+// in the below block or it will be deleted.
+///
+/*** scss-inject ***/
+/*** end scss-inject ***/
+
+a span {
+    height: 1px;
+    width: 1px;
+    position: absolute;
+    overflow: hidden;
+    top: -10px;
+}
+
+nav[data-toggle='toc'] {
+  margin-top: 30px;
+}
+
+/* small screens */
+@media (max-width: 768px) {
+  /* override the Affix plugin so that the navigation isn't sticky */
+  nav.affix[data-toggle='toc'] {
+    position: static;
+  }
+
+  /* PICK ONE */
+  /* don't expand nested items, which pushes down the rest of the page when navigating */
+  /*nav[data-toggle='toc'] .nav .active .nav {
+    display: none;
+  }*/
+  /* alternatively, if you *do* want the second-level navigation to be shown (as seen on this page on mobile), use this */
+  nav[data-toggle='toc'] .nav .nav {
+    display: block;
+  }
+}
