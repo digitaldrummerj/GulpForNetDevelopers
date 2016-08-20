@@ -114,13 +114,16 @@ function addCommitPushGhPages(done) {
         });
 }
 
-function commitVersionFiles() {
+function commitVersionFiles(done) {
     return gulp.src(config.paths.appRoot + '/**/*')
-        .pipe(plugins.git.add())
-        .pipe(plugins.git.commit('gulp build for v' + buildVersion))
-        .pipe(plugins.git.push('origin', 'master', function (err) {
-            if (err) throw err;
-        }));
+        .pipe(plugins.git.add({ cwd: config.paths.appRoot }))
+        .pipe(plugins.git.commit('gulp build for v' + buildVersion, { emitData: true, cwd: config.paths.appRoot }))
+        .on('end', function() {
+            plugins.git.push('origin', 'master', { cwd: config.paths.appRoot }, function (err) {
+                if (err) throw err;
+                done();
+            });
+        });
 }
 
 function moveAndFlattenFonts() {
