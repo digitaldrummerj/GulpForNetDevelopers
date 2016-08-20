@@ -22,8 +22,19 @@
 
     <div class="row">
         <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h2 class="panel-title">Overview</h2></div>
+                <div class="panel-body">
+                    <p>The compile sass tasks takes care of taking your scss files and compiling them down to css.</p>
 
-            <h2>Overview</h2>
+                    <ol>
+                        <li>It will look for scss files in the config.fileCollections.styles setting and add the @import statement into the main.scss files.</li>
+                        <li>It will then create a source maps for it</li>
+                        <li>It will add vendor prefixes to your css</li>
+                        <li>It will compile the main.scss and the files css files in config.paths.bowerComponents to css in a compressed format.  The resulting files will be stored in the app\.tmp folder or whatever the config.paths.tmp variable is set to.</li>
+                    </ol>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -136,16 +147,14 @@ function compileSass() {
 module.exports = {
     compileSass: compileSass
 }
-    </code>
-</pre>
 
+</code></pre>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
             <h2>Adding Task to gulpfile.js</h2>
             <p class="label label-default">File: gulpfile.js</p>
-
 <pre>
 <code class="javascript">
 'use strict';
@@ -165,7 +174,8 @@ gulp.task('compile:sass', sass.compileSass);
 
 <pre>
 <code class="dos">
-    gulp compile:sass
+gulp compile:sass
+
 </code>
 </pre>
         </div>

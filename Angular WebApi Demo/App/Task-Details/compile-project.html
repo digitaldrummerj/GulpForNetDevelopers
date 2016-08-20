@@ -23,12 +23,75 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <h2>Overview</h2>
+            <div class="panel panel-default">
+                <div class="panel-heading"><h2 class="panel-title">Overview</h2></div>
+                <div class="panel-body">
+                    <p>The compile project tasks takes care of compile your project without increment the version numbers or deploying it anywhere.  </p>
+
+                    <ol>
+                        <li>Run lint task</li>
+                        <li>Run inject task</li>
+                        <li>Get version number from package.json</li>
+                        <li>Create versioned build directory</li>
+                        <li>Delete existing files from the versioned build directory</li>
+                        <li>Compile the solution using msbuild</li>
+                        <li>Copy the msbuild output to the build directory.</li>
+                    </ol>
+                </div>
+            </div>
+
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <h2>Code Example</h2>
+            <h2>Configuration</h2>
+            <p class="label label-default">File: gulp/config.js</p>
+            <span class="label label-warning">only applicable config from file</span>
+            <pre>
+            <code class="javascript">
+        </code>
+        </pre>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Variables</h2>
+            <p class="label label-default">File: gulp/styles.js</p>
+            <pre>
+            <code class="javascript">
+</code>
+</pre>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Task</h2>
+            <p class="label label-default">File: gulp/styles.js</p>
+<pre>
+<code class="javascript">
+</code></pre>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Adding Task to gulpfile.js</h2>
+            <p class="label label-default">File: gulpfile.js</p>
+<pre>
+<code class="javascript">
+</code>
+</pre>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+
+            <h2>Running Task</h2>
+
+<pre>
+<code class="dos">
+gulp 
+</code>
+</pre>
         </div>
     </div>
 </div>

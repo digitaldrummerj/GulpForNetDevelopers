@@ -26,21 +26,26 @@ gulp.task('bump:patch', bump.bumpPatch);
 
 //compile
 var compile = require('./gulp/compile');
+
+// lint, inject, msbuild
 gulp.task('compile:solution', compile.buildSolution);
 
-//release
-gulp.task('compile:release', compile.packageRelease)
+// lint inject, increment version, build and push to git
+gulp.task('compile:release', compile.packageRelease);
+gulp.task('compile:dryrun', compile.packageReleaseDryRun);
 
-//inject
+//inject 
+// add script and css file references to index.html page
 var inject = require('./gulp/inject');
 gulp.task('inject:all', inject.inject);
 gulp.task('inject:css', inject.injectCss);
 gulp.task('inject:js', inject.injectJavaScript);
 
 // compile sass
+// inject scss into main.scss and compile to css
 var sass = require('./gulp/styles');
 gulp.task('compile:sass', sass.compileSass);
 
-//watch files and reload browser sync
+//watch files, run tasks and reload browser
 var watch = require('./gulp/watch');
 gulp.task('browsersync', watch.browsersync);
