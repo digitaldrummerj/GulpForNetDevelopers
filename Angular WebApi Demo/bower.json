@@ -1,7 +1,7 @@
 {
   "name": "gulp-for-dotnet",
   "private": true,
-  "version": "4.0.84",
+  "version": "4.0.85",
   "dependencies": {
     "angular": "~1.5.0",
     "angular-resource": "~1.5.0",
