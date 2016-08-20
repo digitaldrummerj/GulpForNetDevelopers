@@ -45,7 +45,7 @@ function buildSolution() {
 function copyToBuildDir() {
     plugins.gutil.log('projectTmpBuildOutput: ' + paths.projectTmpBuildOutput);
     plugins.gutil.log('buildDir: ' + buildDir);
-    return gulp.src([paths.projectTmpBuildOutput])
+    return gulp.src([paths.projectTmpBuildOutput, '!' + paths.projectTmpBuildOutput + '.gitignore'])
         .pipe(gulp.dest(buildDir));
 }
 
@@ -66,7 +66,7 @@ function deleteBuildDir() {
     return plugins.del([buildDir], { force: true });
 }
 
-function copyToFileShare() {
+function copyToFileShare(done) {
     return gulp.src(buildDir + '/**/*')
 		.pipe(gulp.dest(fileShare + '/' + buildVersion + '/'));
 }
@@ -80,8 +80,6 @@ function getGhPages (done) {
         }
         done();
     });
-
-    done();
 }
 
 function checkoutGhPages(done){
@@ -98,14 +96,18 @@ function deleteExistingFiles() {
     return plugins.del([buildDir + '/**/*', '!' + buildDir + '/.git/*'], { force: true });
 }
 
-function addCommitPushGhPages() {
+function delGitIgnore() {
     return gulp.src(buildDir + '/.gitignore')
-        .pipe(plugins.vinylPaths(plugins.del({force: true}))
-        .pipe(gulp.src(buildDir + '/**/*'))        
+        .pipe(plugins.vinylPaths(plugins.del({ force: true })))
+}
+
+function addCommitPushGhPages() {
+    return gulp.src(buildDir + '/**/*')    
         .pipe(plugins.git.add())
         .pipe(plugins.git.commit('gulp build for v' + buildVersion))
         .pipe(plugins.git.push('origin', 'gh-pages', function (err) {
             if (err) throw err;
+            done();
         }));
 }
 

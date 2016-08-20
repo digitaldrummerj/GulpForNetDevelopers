@@ -75,7 +75,6 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include=".gitignore" />
     <Content Include="404.html" />
     <Content Include="App\app.js" />
     <Content Include="App\Home\home.controller.js" />
