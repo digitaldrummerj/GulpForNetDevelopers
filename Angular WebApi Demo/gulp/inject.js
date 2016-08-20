@@ -7,7 +7,8 @@ var gulp = require('gulp'),
         angularFilesort: require('gulp-angular-filesort'),
         inject: require('gulp-inject'),
         naturalSort: require('gulp-natural-sort'),
-        mainBowerFiles: require('main-bower-files')
+        mainBowerFiles: require('main-bower-files'),
+        cheerio: require('gulp-cheerio')
     },
     injectIgnore = [
 
@@ -28,7 +29,6 @@ function mainBowerFilesFilter(filePath) {
 }
 
 function injectJavaScript() {
-    console.log('scripts', config.fileCollections.scripts);
     return gulp.src(config.files.indexHtml)
 		.pipe(plugins.inject(gulp.src(plugins.mainBowerFiles({ filter: mainBowerFilesFilter }), {
 		    base: config.paths.app,
@@ -59,10 +59,23 @@ var injectCss = gulp.series(
     }
 );
 
+function injectRelease() {
+    return gulp.src(config.files.distIndexHtml)
+		.pipe(plugins.cheerio(function ($) {
+		    $('script[src]').remove();   //remove all the extra script tags (we concatenated them in the moveScriptsToDist task)
+		    $('link[href~=".css"]').remove();   //remove all the extra script tags (we concatenated them in the moveScriptsToDist task)
+		}))
+		.pipe(plugins.inject(gulp.src(config.files.distScripts), { relative: true }))
+		.pipe(plugins.inject(gulp.src(config.files.distCss), { relative: true }))
+		.pipe(gulp.dest(config.paths.dist))
+}
+
+
 var inject = gulp.series(injectJavaScript, injectCss);
 
 module.exports = {
     inject: inject,
     injectCss: injectCss,
-    injectJavaScript: injectJavaScript
+    injectJavaScript: injectJavaScript,
+    injectRelease: injectRelease
 };

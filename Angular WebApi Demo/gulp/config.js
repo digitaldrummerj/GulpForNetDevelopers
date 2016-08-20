@@ -7,29 +7,32 @@ var projectName = 'MusicCityCode', // must be kebab-case
     dotNetProjectName = 'Angular WebApi Demo',
     appRoot = './',
     app = appRoot + 'app',
-    distRoot = 'dist',
-    buildsBaseDir = '../builds',
+    
+    buildsBaseDir = '../../builds',
+    distRoot = buildsBaseDir,
     tmpBuildDir = buildsBaseDir + '/tmp',
+    projectTmpBuildOutput = tmpBuildDir + '/' + '_PublishedWebsites/' + dotNetProjectName,
     iisPort = 56712;
 
 var paths = {
-    appRoot: appRoot,
     app: app,
-    buildsBaseDir: buildsBaseDir,
-    styles: app + '/styles',
-    images: app + '/images',
-    dist: distRoot,
-    distStyles: distRoot + '/styles',
-    distFonts: distRoot + '/styles/fonts',
-    distImages: distRoot + '/images/',
-    tmp: app + '/.tmp',
-    tmpFonts: app + '/.tmp/fonts',
+    appRoot: appRoot,
     bowerComponents: app + '/bower_components',
-    nodeModules: appRoot + 'node_modules',
+    buildsBaseDir: buildsBaseDir,
     deployFileShare: '//127.0.0.1/shareDemo$/' + projectName,
+    dist: projectTmpBuildOutput,
+    distFonts: projectTmpBuildOutput + '/app/styles/fonts',
+    distImages: projectTmpBuildOutput + '/app/images/',
+    distScripts: projectTmpBuildOutput + '/app/scripts',
+    distStyles: projectTmpBuildOutput + '/app/styles',
+    gitUrl: 'https://github.com/digitaldrummerj/GulpForNetDevelopers.git',
+    images: app + '/images',
+    nodeModules: appRoot + 'node_modules',
+    projectTmpBuildOutput: projectTmpBuildOutput,
+    styles: app + '/styles',
+    tmp: app + '/.tmp',
     tmpBuildDir: tmpBuildDir,
-    projectTmpBuildOutput: tmpBuildDir + '/' + '_PublishedWebsites/' + dotNetProjectName + '/**/*',
-    gitUrl: 'https://github.com/digitaldrummerj/GulpForNetDevelopers.git'
+    tmpFonts: app + '/.tmp/fonts'
 };
 
 var files = {
@@ -38,11 +41,11 @@ var files = {
     bowerComponents: paths.bowerComponents + '/**/*',
     bowerJson: paths.appRoot + 'bower.json',
     dist: paths.dist + '/**/*',
-    distHtml: paths.dist + '/**/*.html',
     distCss: paths.distStyles + '/**/*.css',
+    distHtml: paths.dist + '/**/*.html',
     distIndexHtml: paths.dist + '/index.html',
-    distScripts: paths.dist + '/**/*.js',
     distManifest: paths.dist + '/rev-manifest.json',
+    distScripts: paths.distScripts + '/**/*.js',
     favicons: paths.app + '/**/*.ico',
     fonts: paths.app + '/**/*.{eot,svg,ttf,woff}',
     html: paths.app + '/**/*.html',
@@ -56,6 +59,7 @@ var files = {
     mainScss: paths.styles + '/main.scss',
     nodeModules: paths.nodeModules + '/**/*',
     packageJson: 'package.json',
+    projectTmpBuildOutput: projectTmpBuildOutput  + '/**/*',
     scripts: paths.app + '/**/*.js',
     solutionFiles: '../*.sln',
     styles: paths.app + '/**/*.scss',
@@ -110,16 +114,14 @@ var fileCollections = {
         files.moduleScripts,
 		'!' + files.nodeModules,
 		'!' + files.tmp,
-        '!' + files.bowerComponents,
-        paths.bowerComponents + '/bootstrap-toc/dist/bootstrap-toc.min.js'
+        '!' + files.bowerComponents
     ],
     styles: [
 		files.styles,
         '!' + files.mainScss,
 		'!' + files.nodeModules,
 		'!' + files.tmp,
-        '!' + files.bowerComponents,
-        paths.bowerComponents + '/bootstrap-toc/dist/bootstrap-toc.min.css'
+        '!' + files.bowerComponents
     ]
 };
 
@@ -137,6 +139,7 @@ module.exports = {
     paths: paths,
     files: files,
     fileCollections: fileCollections,
+    distRoot: distRoot,
     errorHandler: errorHandler,
     minifyHtml: {
         removeComments: true,

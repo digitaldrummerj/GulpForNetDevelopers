@@ -41,8 +41,6 @@ function updateVersion() {
 }
 
 function updateAssemblyInfoFiles(done) {
-    console.log(newVer);
-    console.log(assemblyInfoFiles);
     return gulp.src(assemblyInfoFiles)
 		.pipe(plugins.assemblyInfo({
 		    version: newVer,

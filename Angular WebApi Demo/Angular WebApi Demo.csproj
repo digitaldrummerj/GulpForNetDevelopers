@@ -95,7 +95,7 @@
     <None Include="gulp\inject.js" />
     <None Include="gulp\lint.js" />
     <None Include="gulp\styles.js" />
-    <Content Include="gulp\watch.js" />
+    <None Include="gulp\watch.js" />
     <Content Include="index.html" />
     <Content Include="Web.config" />
   </ItemGroup>

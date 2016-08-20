@@ -2,33 +2,36 @@
 
 var gulp = require('gulp'),
     plugins = {
-        msbuild: require("gulp-msbuild"),
-        gutil: require('gulp-util'),
+        concat: require('gulp-concat'),
         data: require('gulp-data'),
         del: require('del'),
+        domSrc: require('gulp-dom-src'),
+        flatten: require('gulp-flatten'),
         git: require('gulp-git'),
-        vinylPaths: require('vinyl-paths')
+        gutil: require('gulp-util'),
+        msbuild: require("gulp-msbuild"),
+        ngAnnotate: require('gulp-ng-annotate'),
+        rev: require('gulp-rev'),
+        revReplace: require('gulp-rev-replace'),
+        uglify: require('gulp-uglify')
     },
     config = require('./config'),
     bump = require('./bump'),
     files = config.files,
     paths = config.paths,
+    fileCollections = config.fileCollections,
     solutionFiles = config.files.solutionFiles,
     fileShare = config.paths.deployFileShare,
 
     buildBaseDir = config.paths.buildsBaseDir,
     tmpBuildDir = config.paths.tmpBuildDir,
-    buildVersion = '0.0.0';
+    buildVersion = '0.0.0',
+    lint = require('./lint').lint,
+    inject = require('./inject');
+
 
 var buildDir = buildBaseDir + '/' + buildVersion;
 
-//bump
-//get version
-//update build dir with version
-//build solution
-
-// default configuration is release
-// default target is Rebuild
 function buildSolution() {
     return gulp.src(solutionFiles)
 		.pipe(plugins.msbuild({
@@ -45,7 +48,7 @@ function buildSolution() {
 function copyToBuildDir() {
     plugins.gutil.log('projectTmpBuildOutput: ' + paths.projectTmpBuildOutput);
     plugins.gutil.log('buildDir: ' + buildDir);
-    return gulp.src([paths.projectTmpBuildOutput, '!' + paths.projectTmpBuildOutput + '.gitignore'])
+    return gulp.src([files.projectTmpBuildOutput, '!' + files.projectTmpBuildOutput + '.gitignore'])
         .pipe(gulp.dest(buildDir));
 }
 
@@ -71,18 +74,18 @@ function copyToFileShare(done) {
 		.pipe(gulp.dest(fileShare + '/' + buildVersion + '/'));
 }
 
-function getGhPages (done) {
+function getGhPages(done) {
     plugins.git.clone(config.paths.gitUrl, { args: buildDir }, function (err) {
         // handle err 
         if (err) {
             console.log('getGhPages Clone Error', err);
-            throw err;                
+            throw err;
         }
         done();
     });
 }
 
-function checkoutGhPages(done){
+function checkoutGhPages(done) {
     plugins.git.checkout('gh-pages', { cwd: buildDir }, function (err) {
         if (err) {
             console.log('checkoutGhPages error', err);
@@ -96,33 +99,70 @@ function deleteExistingFiles() {
     return plugins.del([buildDir + '/**/*', '!' + buildDir + '/.git/*'], { force: true });
 }
 
-function delGitIgnore() {
-    return gulp.src(buildDir + '/.gitignore')
-        .pipe(plugins.vinylPaths(plugins.del({ force: true })))
-}
-
-function addCommitPushGhPages() {
-    return gulp.src(buildDir + '/**/*')    
-        .pipe(plugins.git.add())
-        .pipe(plugins.git.commit('gulp build for v' + buildVersion))
-        .pipe(plugins.git.push('origin', 'gh-pages', function (err) {
-            if (err) throw err;
-            done();
-        }));
+function addCommitPushGhPages(done) {
+    return gulp.src(buildDir + '/**/*')
+        .pipe(plugins.git.add({ args: '--all', cwd: buildDir }))
+        .pipe(plugins.git.commit('gulp build for v' + buildVersion, {emitData:true, cwd: buildDir }))
+        //.on('data',function(data) {
+        //    console.log(data);
+        //})
+        .on('end', function() {
+            plugins.git.push('origin', 'gh-pages', { cwd: buildDir }, function (err) {
+                if (err) throw err;
+                done();
+            });
+        });
 }
 
 function commitVersionFiles() {
     return gulp.src(config.paths.appRoot)
-        .pipe(add())
+        .pipe(plugins.git.add())
         .pipe(plugins.git.commit('gulp build for v' + buildVersion))
-        .pipe(gt.push('origin', 'master', function (err) {
+        .pipe(plugins.git.push('origin', 'master', function (err) {
             if (err) throw err;
         }));
+}
+
+function moveAndFlattenFonts() {
+    return gulp.src(files.bowerComponents + '.{eot,svg,ttf,woff,woff2}', { base: files.bowerComponents })
+	    .pipe(plugins.flatten())
+	    .pipe(gulp.dest(paths.distFonts));
+}
+
+function moveBowerComponentImagesToDist() {
+    return gulp.src(files.bowerComponents + '.{png,jpg,jpeg}', { base: paths.app })
+	    .pipe(gulp.dest(paths.distImages))
+}
+
+function moveScriptsToDist() {
+    return plugins.domSrc({
+        file: files.indexHtml,
+        selector: 'script',
+        attribute: 'src'
+    })
+	    .pipe(plugins.ngAnnotate())
+	    .pipe(plugins.uglify()) //takes a long time
+	    .pipe(plugins.concat('app.js'))
+	    .pipe(plugins.rev())
+	    .pipe(gulp.dest(paths.distScripts))
+}
+
+function moveCssToDist() {
+    plugins.gutil.log("paths.distStyles: " + paths.distStyles);
+    return plugins.domSrc({
+        file: files.indexHtml,
+        selector: 'link',
+        attribute: 'href'
+    })
+	    .pipe(plugins.rev())
+	    .pipe(gulp.dest(paths.distStyles))
 }
 
 var compile = gulp.series(updateBuildDir, deleteBuildDir, buildSolution, copyToBuildDir);
 
 var packageRelease = gulp.series(
+        lint,
+        inject.inject,
         bump.bumpPatch,
         updateBuildDir,
         deleteBuildDir,
@@ -133,10 +173,11 @@ var packageRelease = gulp.series(
         checkoutGhPages,
         deleteExistingFiles,
         copyToBuildDir,
-        gulp.parallel(
-            addCommitPushGhPages,
-            copyToFileShare
-        ),
+        moveAndFlattenFonts,
+        moveScriptsToDist,
+		moveCssToDist,
+        inject.injectRelease,
+        addCommitPushGhPages,
         commitVersionFiles
     );
 
