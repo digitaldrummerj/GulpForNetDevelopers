@@ -115,7 +115,7 @@ function addCommitPushGhPages(done) {
 }
 
 function commitVersionFiles() {
-    return gulp.src(config.paths.appRoot)
+    return gulp.src(config.paths.appRoot + '/**/*')
         .pipe(plugins.git.add())
         .pipe(plugins.git.commit('gulp build for v' + buildVersion))
         .pipe(plugins.git.push('origin', 'master', function (err) {
